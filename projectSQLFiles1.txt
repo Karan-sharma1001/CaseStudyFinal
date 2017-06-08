@@ -1,0 +1,142 @@
+ drop table userdetail;
+ drop table CreditCards;
+
+ drop table Accountdetails;
+
+ drop table TransactionInfo;
+
+
+/* Drop Tables */
+
+DROP TABLE TransactionInfo;
+DROP TABLE AccountDetails;
+DROP TABLE AdminLogin;
+DROP TABLE CreditCards;
+DROP TABLE CustomerLogin;
+DROP TABLE Plans;
+DROP TABLE UserDetail;
+
+
+
+
+/* Create Tables */
+
+CREATE TABLE AccountDetails
+(
+	-- AccountNo of Customer
+	AccountNo integer NOT NULL,
+	CreditCardNo varchar2(20) NOT NULL UNIQUE,
+	-- Customer Id for Unique Identification
+	-- 
+	customerId varchar2(20) NOT NULL UNIQUE,
+	TotalBalance integer,
+	activatedDate varchar2(20),
+	BranchId varchar2(20),
+	AccountStatus varchar2(20),
+	PRIMARY KEY (AccountNo)
+);
+
+
+CREATE TABLE AdminLogin
+(
+	Userid varchar2(20) NOT NULL,
+	Password varchar2(20) NOT NULL,
+	PRIMARY KEY (Userid)
+);
+
+
+CREATE TABLE CreditCards
+(
+	CreditCardNo varchar2(20) NOT NULL,
+	ExpireDate varchar2(20) NOT NULL,
+	Cvv integer NOT NULL,
+	Status varchar2(20) NOT NULL,
+	-- Type of Plan
+	PlanType varchar2(20) NOT NULL UNIQUE,
+	PRIMARY KEY (CreditCardNo)
+);
+
+
+CREATE TABLE CustomerLogin
+(
+	Userid varchar2(20) NOT NULL,
+	Password varchar2(20) NOT NULL,
+	PRIMARY KEY (Userid)
+);
+
+
+CREATE TABLE Plans
+(
+	-- Type of Plan
+	PlanType varchar2(20) NOT NULL UNIQUE,
+	LimitOfTransactionAllow integer NOT NULL,
+	RateOfInterest float NOT NULL,
+	Discount float,
+	PRIMARY KEY (PlanType)
+);
+
+
+CREATE TABLE TransactionInfo
+(
+	-- TransactionId
+	TransactionId varchar2(20) NOT NULL,
+	-- Account to which Amount is reduced
+	Vendor varchar2(20) NOT NULL,
+	-- AccountNo of Customer
+	CreditCardNo varchar2(20) NOT NULL,
+	transdate varchar2(20) NOT NULL,
+	Location varchar2(20) NOT NULL,
+	transamount integer NOT NULL,
+	-- Customer Id for Unique Identification
+	-- 
+	Customerid varchar2(20) NOT NULL,
+	plantype varchar2(20) NOT NULL,
+	PRIMARY KEY (TransactionId)
+);
+
+
+CREATE TABLE UserDetail
+(
+	-- Customer Id for Unique Identification
+	-- 
+	Customerid varchar2(20) NOT NULL,
+	-- Name of Customer
+	-- 
+	CustName varchar2(20),
+	EmailAddress varchar2(20),
+	Mobno decimal(10) UNIQUE,
+	PlanType integer,
+	PRIMARY KEY (Customerid)
+);
+
+
+
+/* Create Foreign Keys */
+
+ALTER TABLE TransactionInfo
+	ADD FOREIGN KEY (CreditCardNo)
+	REFERENCES AccountDetails (CreditCardNo);
+
+
+ALTER TABLE AccountDetails
+	ADD FOREIGN KEY (CreditCardNo)
+	REFERENCES CreditCards (CreditCardNo);
+
+
+ALTER TABLE CreditCards
+	ADD FOREIGN KEY (PlanType)
+	REFERENCES Plans (PlanType);
+
+
+ALTER TABLE AccountDetails
+	ADD FOREIGN KEY (customerId)
+	REFERENCES UserDetail (Customerid);
+
+
+ALTER TABLE TransactionInfo
+	ADD FOREIGN KEY (Customerid)
+	REFERENCES UserDetail (Customerid);
+ALTER TABLE userdetail MODIFY plantype varchar2(10);
+
+Insert into userdetail values('karan','karans','Karve nagar',973039631,'gold');
+
